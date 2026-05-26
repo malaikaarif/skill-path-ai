@@ -11,8 +11,12 @@ final router = GoRouter(
   initialLocation: '/onboarding',
   routes: [
     GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
-    GoRoute(path: '/home',       builder: (context, state) => const HomeScreen()),
-    GoRoute(path: '/roadmap',    builder: (context, state) => const RoadmapScreen()),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => HomeScreen(
+        extra: (state.extra as Map<String, dynamic>?) ?? {},
+      ),
+    ),    GoRoute(path: '/roadmap',    builder: (context, state) => const RoadmapScreen()),
     GoRoute(path: '/chat',       builder: (context, state) => const ChatScreen()),
     GoRoute(path: '/quiz',       builder: (context, state) => const QuizScreen()),
   ],

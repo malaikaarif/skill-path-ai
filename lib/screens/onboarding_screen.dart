@@ -1,3 +1,4 @@
+import '../services/claude_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,7 +48,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: (selectedGoal != null && selectedLevel != null && selectedHours != null)
-                      ? () => context.go('/home')
+                      ? () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) => const Center(
+                        child: CircularProgressIndicator(color: Color(0xFF7F77DD)),
+                      ),
+                    );
+                    try {
+                      final service = ClaudeService();
+                      final roadmap = await service.generateRoadmap(
+                        goal: selectedGoal!,
+                        level: selectedLevel!,
+                        hoursPerDay: selectedHours!,
+                      );
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        context.go('/home', extra: {
+                          'roadmap': roadmap,
+                          'goal': selectedGoal,
+                          'level': selectedLevel,
+                          'hours': selectedHours,
+                        });
+                      }
+                    } catch (e) {
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: $e')),
+                        );
+                      }
+                    }
+                  }
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF7F77DD),
