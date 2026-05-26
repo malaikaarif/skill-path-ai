@@ -1,3 +1,4 @@
+import 'screens/topic_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,13 @@ final router = GoRouter(
     GoRoute(
       path: '/roadmap',
       builder: (context, state) => RoadmapScreen(
+        extra: (state.extra as Map<String, dynamic>?) ?? {},
+      ),
+    ),
+
+    GoRoute(
+      path: '/topic',
+      builder: (context, state) => TopicDetailScreen(
         extra: (state.extra as Map<String, dynamic>?) ?? {},
       ),
     ),
