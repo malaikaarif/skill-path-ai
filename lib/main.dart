@@ -32,7 +32,12 @@ final router = GoRouter(
         extra: (state.extra as Map<String, dynamic>?) ?? {},
       ),
     ),
-    GoRoute(path: '/chat',       builder: (context, state) => const ChatScreen()),
+    GoRoute(
+      path: '/chat',
+      builder: (context, state) => ChatScreen(
+        extra: (state.extra as Map<String, dynamic>?) ?? {},
+      ),
+    ),
     GoRoute(path: '/quiz',       builder: (context, state) => const QuizScreen()),
   ],
 );
