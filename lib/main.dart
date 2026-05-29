@@ -38,7 +38,12 @@ final router = GoRouter(
         extra: (state.extra as Map<String, dynamic>?) ?? {},
       ),
     ),
-    GoRoute(path: '/quiz',       builder: (context, state) => const QuizScreen()),
+    GoRoute(
+      path: '/quiz',
+      builder: (context, state) => QuizScreen(
+        extra: (state.extra as Map<String, dynamic>?) ?? {},
+      ),
+    ),
   ],
 );
 

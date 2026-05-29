@@ -48,7 +48,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              '${completedTopics}/${roadmap.length} done',
+                '$completedTopics/${roadmap.length} done',
               style: const TextStyle(
                   color: Color(0xFF3C3489),
                   fontSize: 12,
@@ -118,7 +118,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                   color: isDone
-                      ? const Color(0xFF1D9E75).withOpacity(0.3)
+                      ? const Color(0xFF1D9E75).withValues(alpha: 0.3)
                       : isCurrent
                       ? const Color(0xFF7F77DD)
                       : Colors.grey.shade200,
@@ -127,7 +127,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
                 boxShadow: isCurrent
                     ? [
                   BoxShadow(
-                    color: const Color(0xFF7F77DD).withOpacity(0.15),
+                    color: const Color(0xFF7F77DD).withValues(alpha: 0.15),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   )
