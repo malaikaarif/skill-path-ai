@@ -29,17 +29,30 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
   }
 
   Future<void> _loadResources() async {
-    try {
-      final result = await ClaudeService().getResources(
-        topic: topic['title'] ?? '',
-        level: level,
-      );
+    final tags = List<String>.from(topic['tags'] ?? []);
+    final local = ClaudeService().getResourcesLocal(
+      topic: topic['title'] ?? '',
+      tags: tags,
+    );
+
+    if (local.isNotEmpty) {
       setState(() {
-        resources = result;
+        resources = local;
         loadingResources = false;
       });
-    } catch (e) {
-      setState(() => loadingResources = false);
+    } else {
+      try {
+        final result = await ClaudeService().getResources(
+          topic: topic['title'] ?? '',
+          level: level,
+        );
+        setState(() {
+          resources = result;
+          loadingResources = false;
+        });
+      } catch (e) {
+        setState(() => loadingResources = false);
+      }
     }
   }
 
