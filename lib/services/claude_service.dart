@@ -1,33 +1,36 @@
+import '../config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ClaudeService {
-  static const String _apiKey = 'AIzaSyDt61sur90eiumocB6qvSAZZ-MXXirUZ3k'; // paste your key
-  static const String _model = 'gemini-1.5-flash';
+  static const String _apiKey = Config.groqKey; // paste your key
+  static const String _model = 'llama-3.3-70b-versatile';
   static const String _apiUrl =
-      'https://generativelanguage.googleapis.com/v1beta/models/$_model:generateContent';
+      'https://api.groq.com/openai/v1/chat/completions';
+
 
   Future<String> _call(String prompt) async {
     final response = await http.post(
-      Uri.parse('$_apiUrl?key=$_apiKey'),
-      headers: {'Content-Type': 'application/json'},
+      Uri.parse(_apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $_apiKey',
+      },
       body: jsonEncode({
-        'contents': [
-          {
-            'parts': [
-              {'text': prompt}
-            ]
-          }
+        'model': _model,
+        'messages': [
+          {'role': 'user', 'content': prompt}
         ],
-        'generationConfig': {'temperature': 0.7, 'maxOutputTokens': 2000},
+        'temperature': 0.7,
+        'max_tokens': 2000,
       }),
     );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['candidates'][0]['content']['parts'][0]['text'] as String;
+      return data['choices'][0]['message']['content'] as String;
     } else {
-      throw Exception('Gemini error: ${response.statusCode} ${response.body}');
+      throw Exception('Groq error: ${response.statusCode} ${response.body}');
     }
   }
 
