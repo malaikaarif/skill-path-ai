@@ -174,7 +174,7 @@ class _QuizScreenState extends State<QuizScreen> {
         title: Text(topic['title'] ?? '',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,10 +184,11 @@ class _QuizScreenState extends State<QuizScreen> {
             _buildQuestion(),
             const SizedBox(height: 24),
             _buildOptions(),
-            const Spacer(),
+            const SizedBox(height: 16),
             if (answered) _buildExplanation(),
             const SizedBox(height: 16),
             if (answered) _buildNextButton(),
+            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -340,7 +341,7 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F7FF),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
@@ -429,7 +430,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   ],
                 ),
               ),
-              const Spacer(),
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -437,6 +438,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     'roadmap': adaptedRoadmap,
                     'goal': goal,
                     'level': level,
+                    'completedTopics': 1,
                   }),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF7F77DD),

@@ -21,6 +21,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
     roadmap = List<Map<String, dynamic>>.from(widget.extra['roadmap'] ?? []);
     goal = widget.extra['goal'] ?? '';
     level = widget.extra['level'] ?? '';
+    completedTopics = widget.extra['completedTopics'] as int? ?? 0;
   }
 
   @override
