@@ -78,12 +78,11 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
       bool isCurrent, bool isLocked, int index) {
     return GestureDetector(
       onTap: isCurrent
-          ? () => context.go('/chat', extra: {
-        'topic': topic['title'],
+          ? () => context.go('/topic', extra: {
+        'topic': topic,
         'roadmap': roadmap,
         'goal': goal,
         'level': level,
-        'topicIndex': index,
       })
           : null,
       child: Row(

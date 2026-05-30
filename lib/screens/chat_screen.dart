@@ -206,7 +206,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
               child: Text(
-                msg['content'] ?? '',
+                (msg['content'] ?? '').replaceAll('**', ''),
                 style: TextStyle(
                     color: isUser ? Colors.white : Colors.black87,
                     fontSize: 14,
