@@ -14,6 +14,16 @@ class ClaudeService {
       {'title': 'CS50P - Free Harvard Course', 'url': 'https://cs50.harvard.edu/python', 'type': 'course', 'platform': 'Harvard', 'duration': 'Self-paced'},
       {'title': 'Python Full Course - FreeCodeCamp', 'url': 'https://www.youtube.com/watch?v=rfscVS0vtbw', 'type': 'video', 'platform': 'YouTube', 'duration': '4.5 hrs'},
     ],
+    'ai': [
+      {'title': 'CS50 AI - Harvard Free', 'url': 'https://cs50.harvard.edu/ai', 'type': 'course', 'platform': 'Harvard', 'duration': 'Self-paced'},
+      {'title': 'AI For Everyone - Andrew Ng', 'url': 'https://www.coursera.org/learn/ai-for-everyone', 'type': 'course', 'platform': 'Coursera', 'duration': '6 hrs'},
+      {'title': 'AI Roadmap - FreeCodeCamp', 'url': 'https://www.youtube.com/watch?v=aircAruvnKk', 'type': 'video', 'platform': 'YouTube', 'duration': '20 min'},
+    ],
+    'ml': [
+      {'title': 'ML Specialization - Andrew Ng', 'url': 'https://www.coursera.org/specializations/machine-learning-introduction', 'type': 'course', 'platform': 'Coursera', 'duration': '3 months'},
+      {'title': 'Fast.ai - Free Practical ML', 'url': 'https://course.fast.ai', 'type': 'course', 'platform': 'Fast.ai', 'duration': 'Self-paced'},
+      {'title': 'Kaggle ML Courses - Free', 'url': 'https://www.kaggle.com/learn', 'type': 'course', 'platform': 'Kaggle', 'duration': 'Self-paced'},
+    ],
     'machine learning': [
       {'title': 'ML Specialization - Andrew Ng', 'url': 'https://www.coursera.org/specializations/machine-learning-introduction', 'type': 'course', 'platform': 'Coursera', 'duration': '3 months'},
       {'title': 'Fast.ai - Free Practical ML', 'url': 'https://course.fast.ai', 'type': 'course', 'platform': 'Fast.ai', 'duration': 'Self-paced'},

@@ -1,3 +1,4 @@
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../services/claude_service.dart';
@@ -198,7 +199,14 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
 
   Widget _resourceCard(Map<String, dynamic> r) {
     final isVideo = r['type'] == 'video';
-    return Container(
+    return GestureDetector(
+        onTap: () async {
+          final url = Uri.parse(r['url'] ?? '');
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url, mode: LaunchMode.externalApplication);
+          }
+        },
+        child: Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -242,6 +250,7 @@ class _TopicDetailScreenState extends State<TopicDetailScreen> {
               size: 14, color: Colors.grey),
         ],
       ),
+        ),
     );
   }
 
