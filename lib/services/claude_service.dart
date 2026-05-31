@@ -84,6 +84,47 @@ class ClaudeService {
       {'title': 'Algorithms - Princeton Coursera', 'url': 'https://www.coursera.org/learn/algorithms-part1', 'type': 'course', 'platform': 'Coursera', 'duration': '6 weeks'},
       {'title': 'NeetCode DSA Course', 'url': 'https://neetcode.io/courses/dsa-for-beginners/0', 'type': 'course', 'platform': 'NeetCode', 'duration': 'Self-paced'},
     ],
+
+    'dsa': [
+      {'title': 'NeetCode DSA Course - Free', 'url': 'https://neetcode.io/courses/dsa-for-beginners/0', 'type': 'course', 'platform': 'NeetCode', 'duration': 'Self-paced'},
+      {'title': 'CS50 - Harvard Free', 'url': 'https://cs50.harvard.edu/x', 'type': 'course', 'platform': 'Harvard', 'duration': 'Self-paced'},
+      {'title': 'Abdul Bari Algorithms', 'url': 'https://www.youtube.com/watch?v=0IAPZzGSbME', 'type': 'video', 'platform': 'YouTube', 'duration': 'Series'},
+    ],
+    'competitive programming': [
+      {'title': 'Codeforces - Free Practice', 'url': 'https://codeforces.com', 'type': 'course', 'platform': 'Codeforces', 'duration': 'Self-paced'},
+      {'title': 'USACO Guide - Free', 'url': 'https://usaco.guide', 'type': 'course', 'platform': 'USACO', 'duration': 'Self-paced'},
+      {'title': 'CP Algorithms', 'url': 'https://cp-algorithms.com', 'type': 'article', 'platform': 'cp-algorithms.com', 'duration': 'Reference'},
+    ],
+    'cybersecurity': [
+      {'title': 'CS50 Cybersecurity - Harvard Free', 'url': 'https://cs50.harvard.edu/cybersecurity', 'type': 'course', 'platform': 'Harvard', 'duration': 'Self-paced'},
+      {'title': 'TryHackMe - Free Tier', 'url': 'https://tryhackme.com', 'type': 'course', 'platform': 'TryHackMe', 'duration': 'Self-paced'},
+      {'title': 'NetworkChuck Security', 'url': 'https://www.youtube.com/@NetworkChuck', 'type': 'video', 'platform': 'YouTube', 'duration': 'Series'},
+    ],
+    'penetration testing': [
+      {'title': 'TCM Security - Free Courses', 'url': 'https://academy.tcm-sec.com', 'type': 'course', 'platform': 'TCM Security', 'duration': 'Self-paced'},
+      {'title': 'HackTheBox Academy - Free', 'url': 'https://academy.hackthebox.com', 'type': 'course', 'platform': 'HackTheBox', 'duration': 'Self-paced'},
+      {'title': 'The Cyber Mentor - Full Ethical Hacking', 'url': 'https://www.youtube.com/watch?v=3Kq1MIfTWCE', 'type': 'video', 'platform': 'YouTube', 'duration': '15 hrs'},
+    ],
+    'devops': [
+      {'title': 'DevOps Roadmap - Free', 'url': 'https://roadmap.sh/devops', 'type': 'article', 'platform': 'roadmap.sh', 'duration': 'Reference'},
+      {'title': 'KodeKloud DevOps - Free Tier', 'url': 'https://kodekloud.com', 'type': 'course', 'platform': 'KodeKloud', 'duration': 'Self-paced'},
+      {'title': 'TechWorld with Nana', 'url': 'https://www.youtube.com/@TechWorldwithNana', 'type': 'video', 'platform': 'YouTube', 'duration': 'Series'},
+    ],
+    'blockchain': [
+      {'title': 'Cyfrin Updraft - Free Web3', 'url': 'https://updraft.cyfrin.io', 'type': 'course', 'platform': 'Cyfrin', 'duration': 'Self-paced'},
+      {'title': 'Alchemy University - Free', 'url': 'https://university.alchemy.com', 'type': 'course', 'platform': 'Alchemy', 'duration': 'Self-paced'},
+      {'title': 'Patrick Collins - Solidity Full Course', 'url': 'https://www.youtube.com/watch?v=gyMwXuJrbJQ', 'type': 'video', 'platform': 'YouTube', 'duration': '32 hrs'},
+    ],
+    'cloud': [
+      {'title': 'AWS Free Tier + Training', 'url': 'https://aws.amazon.com/training/digital', 'type': 'course', 'platform': 'AWS', 'duration': 'Self-paced'},
+      {'title': 'Google Cloud Skills Boost - Free', 'url': 'https://cloudskillsboost.google', 'type': 'course', 'platform': 'Google Cloud', 'duration': 'Self-paced'},
+      {'title': 'FreeCodeCamp Cloud Computing', 'url': 'https://www.youtube.com/watch?v=M988_fsOSWo', 'type': 'video', 'platform': 'YouTube', 'duration': '14 hrs'},
+    ],
+    'web development': [
+      {'title': 'The Odin Project - Free', 'url': 'https://www.theodinproject.com', 'type': 'course', 'platform': 'The Odin Project', 'duration': 'Self-paced'},
+      {'title': 'FreeCodeCamp Web Dev', 'url': 'https://www.freecodecamp.org/learn/responsive-web-design', 'type': 'course', 'platform': 'FreeCodeCamp', 'duration': 'Self-paced'},
+      {'title': 'Traversy Media', 'url': 'https://www.youtube.com/@TraversyMedia', 'type': 'video', 'platform': 'YouTube', 'duration': 'Series'},
+    ],
     'sql': [
       {'title': 'SQLZoo - Free Interactive', 'url': 'https://sqlzoo.net', 'type': 'course', 'platform': 'SQLZoo', 'duration': 'Self-paced'},
       {'title': 'Kaggle SQL Course - Free', 'url': 'https://www.kaggle.com/learn/intro-to-sql', 'type': 'course', 'platform': 'Kaggle', 'duration': 'Self-paced'},

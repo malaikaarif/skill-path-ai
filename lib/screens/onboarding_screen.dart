@@ -22,6 +22,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {'title': 'Mobile Developer', 'icon': '📱', 'desc': 'Build iOS & Android apps'},
     {'title': 'Cloud Engineer', 'icon': '☁️', 'desc': 'Design cloud infrastructure'},
     {'title': 'Cybersecurity Expert', 'icon': '🔒', 'desc': 'Protect digital systems'},
+    {'title': 'DSA & Competitive Programming', 'icon': '🧩', 'desc': 'Master algorithms'},
+    {'title': 'Penetration Tester', 'icon': '🕵️', 'desc': 'Ethical hacking & security'},
+    {'title': 'DevOps Engineer', 'icon': '⚙️', 'desc': 'CI/CD & infrastructure'},
+    {'title': 'Blockchain Developer', 'icon': '🔗', 'desc': 'Web3 & smart contracts'},
   ];
 
   final levels = [
