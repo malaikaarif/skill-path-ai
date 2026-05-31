@@ -1,3 +1,4 @@
+import 'screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/topic_detail_screen.dart';
@@ -11,9 +12,13 @@ import 'screens/chat_screen.dart';
 import 'screens/quiz_screen.dart';
 
 final router = GoRouter(
-  initialLocation: '/onboarding',
+  initialLocation: '/login',
   routes: [
     GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
+    ),
     GoRoute(
       path: '/home',
       builder: (context, state) => HomeScreen(
@@ -40,6 +45,7 @@ final router = GoRouter(
         extra: (state.extra as Map<String, dynamic>?) ?? {},
       ),
     ),
+
     GoRoute(
       path: '/quiz',
       builder: (context, state) => QuizScreen(
