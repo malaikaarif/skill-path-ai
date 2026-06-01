@@ -14,6 +14,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   String? selectedLevel;
   String? selectedHours;
   bool _loading = false;
+  final _nameController = TextEditingController();
 
   final goals = [
     {'title': 'AI / ML Engineer', 'icon': '🤖', 'desc': 'Build intelligent systems'},
@@ -42,6 +43,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   ];
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F7FF),
@@ -54,6 +61,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 20),
               _buildHeader(),
               const SizedBox(height: 32),
+              _buildSectionTitle('👤 What\'s your name?'),
+              const SizedBox(height: 12),
+              _buildNameField(),
+              const SizedBox(height: 28),
               _buildSectionTitle('🎯 What is your goal?'),
               const SizedBox(height: 12),
               _buildGoalGrid(),
@@ -104,6 +115,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         const Text('AI will create a personalized roadmap just for you',
             style: TextStyle(color: Colors.grey, fontSize: 14)),
       ],
+    );
+  }
+
+  Widget _buildNameField() {
+    return TextField(
+      controller: _nameController,
+      textCapitalization: TextCapitalization.words,
+      decoration: InputDecoration(
+        hintText: 'Enter your name',
+        hintStyle: TextStyle(color: Colors.grey.shade400),
+        prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF7F77DD)),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade200),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade200),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF7F77DD), width: 2),
+        ),
+      ),
     );
   }
 
@@ -252,7 +289,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildGenerateButton() {
-    final canGenerate = selectedGoal != null && selectedLevel != null && selectedHours != null;
+    final canGenerate = selectedGoal != null &&
+        selectedLevel != null &&
+        selectedHours != null &&
+        _nameController.text.trim().isNotEmpty;
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -302,11 +342,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         hoursPerDay: selectedHours!,
       );
 
+      final name = _nameController.text.trim();
+
       // Save to Firebase
       await FirebaseService.saveUserProfile(
         goal: selectedGoal!,
         level: selectedLevel!,
         hoursPerDay: selectedHours!,
+        name: name,
       );
       await FirebaseService.saveRoadmap(roadmap);
 
@@ -316,6 +359,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'goal': selectedGoal,
           'level': selectedLevel,
           'hours': selectedHours,
+          'name': name,
         });
       }
     } catch (e) {

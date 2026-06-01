@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../services/firebase_service.dart';
 
 class RoadmapScreen extends StatefulWidget {
   final Map<String, dynamic> extra;
@@ -14,18 +15,50 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
   String goal = '';
   String level = '';
   int completedTopics = 0;
+  bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    roadmap = List<Map<String, dynamic>>.from(widget.extra['roadmap'] ?? []);
-    goal = widget.extra['goal'] ?? '';
-    level = widget.extra['level'] ?? '';
-    completedTopics = widget.extra['completedTopics'] as int? ?? 0;
+    _loadFromFirestore();
   }
+
+  Future<void> _loadFromFirestore() async {
+    setState(() => _loading = true);
+    try {
+      final profile = await FirebaseService.getUserProfile();
+      final savedRoadmap = await FirebaseService.getRoadmap();
+      final completed = await FirebaseService.getCompletedTopics();
+
+      setState(() {
+        goal = profile?['goal'] ?? widget.extra['goal'] ?? '';
+        level = profile?['level'] ?? widget.extra['level'] ?? '';
+        roadmap = savedRoadmap ?? List<Map<String, dynamic>>.from(widget.extra['roadmap'] ?? []);
+        completedTopics = completed;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        roadmap = List<Map<String, dynamic>>.from(widget.extra['roadmap'] ?? []);
+        goal = widget.extra['goal'] ?? '';
+        level = widget.extra['level'] ?? '';
+        _loading = false;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(
+        backgroundColor: Color(0xFFF8F7FF),
+        body: Center(
+          child: CircularProgressIndicator(color: Color(0xFF7F77DD)),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F7FF),
       appBar: AppBar(
@@ -49,7 +82,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-                '$completedTopics/${roadmap.length} done',
+              '$completedTopics/${roadmap.length} done',
               style: const TextStyle(
                   color: Color(0xFF3C3489),
                   fontSize: 12,
@@ -59,17 +92,22 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
         ],
       ),
       body: roadmap.isEmpty
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFF7F77DD)))
-          : ListView.builder(
-        padding: const EdgeInsets.all(24),
-        itemCount: roadmap.length,
-        itemBuilder: (context, index) {
-          final topic = roadmap[index];
-          final isDone = index < completedTopics;
-          final isCurrent = index == completedTopics;
-          final isLocked = index > completedTopics;
-          return _buildTopicItem(topic, isDone, isCurrent, isLocked, index);
-        },
+          ? const Center(child: Text('No roadmap yet. Go back and generate one!'))
+          : RefreshIndicator(
+        onRefresh: _loadFromFirestore,
+        color: const Color(0xFF7F77DD),
+        child: ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(24),
+          itemCount: roadmap.length,
+          itemBuilder: (context, index) {
+            final topic = roadmap[index];
+            final isDone = index < completedTopics;
+            final isCurrent = index == completedTopics;
+            final isLocked = index > completedTopics;
+            return _buildTopicItem(topic, isDone, isCurrent, isLocked, index);
+          },
+        ),
       ),
       bottomNavigationBar: _buildNavBar(),
     );
@@ -81,15 +119,17 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
       onTap: isCurrent
           ? () => context.go('/topic', extra: {
         'topic': topic,
+        'topicIndex': index,
         'roadmap': roadmap,
         'goal': goal,
         'level': level,
       })
+          : isDone
+          ? null
           : null,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Timeline line + dot
           Column(
             children: [
               _buildDot(isDone, isCurrent),
@@ -104,7 +144,6 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
             ],
           ),
           const SizedBox(width: 16),
-          // Topic card
           Expanded(
             child: Container(
               margin: const EdgeInsets.only(bottom: 12),
@@ -178,7 +217,8 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
                     topic['description'] ?? '',
                     style: TextStyle(
                         fontSize: 12,
-                        color: isLocked ? Colors.grey.shade400 : Colors.grey),
+                        color:
+                        isLocked ? Colors.grey.shade400 : Colors.grey),
                   ),
                   const SizedBox(height: 10),
                   Row(
@@ -190,17 +230,48 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
                           const Color(0xFFE1F5EE), const Color(0xFF0F6E56)),
                       const Spacer(),
                       if (isCurrent)
-                        const Row(
-                          children: [
-                            Text('Start',
-                                style: TextStyle(
-                                    color: Color(0xFF7F77DD),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(width: 4),
-                            Icon(Icons.arrow_forward,
-                                size: 14, color: Color(0xFF7F77DD)),
-                          ],
+                        GestureDetector(
+                          onTap: () => context.go('/topic', extra: {
+                            'topic': topic,
+                            'topicIndex': index,
+                            'roadmap': roadmap,
+                            'goal': goal,
+                            'level': level,
+                          }),
+                          child: const Row(
+                            children: [
+                              Text('Start',
+                                  style: TextStyle(
+                                      color: Color(0xFF7F77DD),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600)),
+                              SizedBox(width: 4),
+                              Icon(Icons.arrow_forward,
+                                  size: 14, color: Color(0xFF7F77DD)),
+                            ],
+                          ),
+                        ),
+                      if (isDone)
+                        GestureDetector(
+                          onTap: () => context.go('/topic', extra: {
+                            'topic': topic,
+                            'topicIndex': index,
+                            'roadmap': roadmap,
+                            'goal': goal,
+                            'level': level,
+                          }),
+                          child: const Row(
+                            children: [
+                              Text('Review',
+                                  style: TextStyle(
+                                      color: Color(0xFF1D9E75),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600)),
+                              SizedBox(width: 4),
+                              Icon(Icons.arrow_forward,
+                                  size: 14, color: Color(0xFF1D9E75)),
+                            ],
+                          ),
                         ),
                     ],
                   ),
@@ -262,7 +333,7 @@ class _RoadmapScreenState extends State<RoadmapScreen> {
         }
         if (i == 2) {
           context.go('/chat', extra: {
-            'topic': roadmap.isNotEmpty ? roadmap[0]['title'] : '',
+            'topic': roadmap.isNotEmpty ? roadmap[completedTopics.clamp(0, roadmap.length - 1)]['title'] : '',
             'roadmap': roadmap,
             'goal': goal,
             'level': level,

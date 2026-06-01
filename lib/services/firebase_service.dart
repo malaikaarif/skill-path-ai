@@ -46,6 +46,7 @@ class FirebaseService {
     required String goal,
     required String level,
     required String hoursPerDay,
+    String? name,           // ADD THIS
   }) async {
     final uid = currentUser?.uid;
     if (uid == null) return;
@@ -53,6 +54,7 @@ class FirebaseService {
       'goal': goal,
       'level': level,
       'hoursPerDay': hoursPerDay,
+      'name': name ?? '',
       'createdAt': FieldValue.serverTimestamp(),
       'streak': 1,
       'lastActiveDate': DateTime.now().toIso8601String(),

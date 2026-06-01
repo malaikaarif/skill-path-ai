@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ClaudeService {
-  static const String _apiKey = Config.groqKey;
-  static const String _model = 'llama-3.3-70b-versatile';
+  static const String _apiKey = Config.apiKey;
+  // static const String _model = 'llama-3.3-70b-versatile';
+  static const String _model = 'llama-3.1-8b-instant';
+  // static const String _apiUrl = 'https://corsproxy.io/?https://api.groq.com/openai/v1/chat/completions';
   static const String _apiUrl = 'https://api.groq.com/openai/v1/chat/completions';
-
   // ─── REAL RESOURCE LIBRARY ───────────────────────────────────────────────
   static const Map<String, List<Map<String, String>>> _resources = {
     'python': [
@@ -84,7 +85,6 @@ class ClaudeService {
       {'title': 'Algorithms - Princeton Coursera', 'url': 'https://www.coursera.org/learn/algorithms-part1', 'type': 'course', 'platform': 'Coursera', 'duration': '6 weeks'},
       {'title': 'NeetCode DSA Course', 'url': 'https://neetcode.io/courses/dsa-for-beginners/0', 'type': 'course', 'platform': 'NeetCode', 'duration': 'Self-paced'},
     ],
-
     'dsa': [
       {'title': 'NeetCode DSA Course - Free', 'url': 'https://neetcode.io/courses/dsa-for-beginners/0', 'type': 'course', 'platform': 'NeetCode', 'duration': 'Self-paced'},
       {'title': 'CS50 - Harvard Free', 'url': 'https://cs50.harvard.edu/x', 'type': 'course', 'platform': 'Harvard', 'duration': 'Self-paced'},
@@ -139,7 +139,6 @@ class ClaudeService {
   }) {
     final topicLower = topic.toLowerCase();
 
-    // Match by tags first
     for (final tag in tags) {
       if (_resources.containsKey(tag.toLowerCase())) {
         return _resources[tag.toLowerCase()]!
@@ -148,7 +147,6 @@ class ClaudeService {
       }
     }
 
-    // Match by topic name
     for (final key in _resources.keys) {
       if (topicLower.contains(key) || key.contains(topicLower)) {
         return _resources[key]!
@@ -157,7 +155,6 @@ class ClaudeService {
       }
     }
 
-    // Fallback
     return [
       {
         'title': 'Search on YouTube',
@@ -191,13 +188,13 @@ class ClaudeService {
         'temperature': 0.7,
         'max_tokens': 2000,
       }),
-    );
+    ).timeout(const Duration(seconds: 30));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return data['choices'][0]['message']['content'] as String;
     } else {
-      throw Exception('Groq error: ${response.statusCode} ${response.body}');
+      throw Exception('API error: ${response.statusCode} ${response.body}');
     }
   }
 
@@ -212,7 +209,7 @@ You are an expert learning path designer.
 Generate a personalized learning roadmap for someone who wants to become a $goal.
 Their current level is $level and they can study $hoursPerDay per day.
 
-Return ONLY a valid JSON array with exactly 10 topics. No explanation, no markdown, no code blocks. Just raw JSON.
+Return ONLY a valid JSON array with exactly 8 topics. No explanation, no markdown, no code blocks. Just raw JSON.
 Each topic must have these exact fields:
 [
   {
@@ -229,11 +226,13 @@ Each topic must have these exact fields:
 ''';
 
     final text = await _call(prompt);
-    final cleaned = text.trim().replaceAll('```json', '').replaceAll('```', '').trim();
+    final start = text.indexOf('[');
+    final end = text.lastIndexOf(']');
+    if (start == -1 || end == -1) throw Exception('No JSON array found in response');
+    final cleaned = text.substring(start, end + 1);
     final List<dynamic> jsonList = jsonDecode(cleaned);
     return jsonList.map((e) => Map<String, dynamic>.from(e)).toList();
   }
-
   // ─── 2. DAILY TASK GENERATOR ─────────────────────────────────────────────
   Future<Map<String, dynamic>> generateDailyTask({
     required String currentTopic,
