@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "828509550581",
+    "project_id": "skill-path-ai-c172e",
+    "storage_bucket": "skill-path-ai-c172e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828509550581:android:099381e971e70bc368d2bc",
+        "android_client_info": {
+          "package_name": "com.example.skill_path_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm9PVDrxZfHJGTDQGTKoZiTPHghngd3gM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

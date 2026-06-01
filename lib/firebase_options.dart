@@ -17,17 +17,11 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -72,4 +66,22 @@ class DefaultFirebaseOptions {
     authDomain: 'skill-path-ai-c172e.firebaseapp.com',
     storageBucket: 'skill-path-ai-c172e.firebasestorage.app',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBYjD0dLtF3repAnF1_HrKtEZAo8YotZcM',
+    appId: '1:828509550581:web:ed5ac739f686ec5868d2bc',
+    messagingSenderId: '828509550581',
+    projectId: 'skill-path-ai-c172e',
+    authDomain: 'skill-path-ai-c172e.firebaseapp.com',
+    storageBucket: 'skill-path-ai-c172e.firebasestorage.app',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyBm9PVDrxZfHJGTDQGTKoZiTPHghngd3gM',
+    appId: '1:828509550581:android:099381e971e70bc368d2bc',
+    messagingSenderId: '828509550581',
+    projectId: 'skill-path-ai-c172e',
+    storageBucket: 'skill-path-ai-c172e.firebasestorage.app',
+  );
+
 }

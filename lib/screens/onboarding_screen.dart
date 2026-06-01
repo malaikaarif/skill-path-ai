@@ -116,9 +116,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1.6,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
+        childAspectRatio: MediaQuery.of(context).size.width > 600 ? 3.0 : 1.6,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
