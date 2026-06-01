@@ -118,7 +118,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
-        childAspectRatio: MediaQuery.of(context).size.width > 600 ? 3.0 : 1.6,
+        childAspectRatio: MediaQuery.of(context).size.width > 600 ? 3.0 : 1.4,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
@@ -151,9 +151,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Text(goal['icon']!, style: const TextStyle(fontSize: 24)),
                 const SizedBox(height: 4),
                 Text(goal['title']!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 12,
+                        fontSize: 11,
                         color: isSelected
                             ? const Color(0xFF3C3489)
                             : Colors.black87)),
