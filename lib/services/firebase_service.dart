@@ -5,7 +5,6 @@ class FirebaseService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // ─── AUTH ─────────────────────────────────────────────────────────────────
   static User? get currentUser => _auth.currentUser;
   static Stream<User?> get authStream => _auth.authStateChanges();
 
@@ -41,12 +40,11 @@ class FirebaseService {
     await _auth.signOut();
   }
 
-  // ─── USER PROFILE ─────────────────────────────────────────────────────────
   static Future<void> saveUserProfile({
     required String goal,
     required String level,
     required String hoursPerDay,
-    String? name,           // ADD THIS
+    String? name,
   }) async {
     final uid = currentUser?.uid;
     if (uid == null) return;
@@ -60,15 +58,41 @@ class FirebaseService {
       'lastActiveDate': DateTime.now().toIso8601String(),
     }, SetOptions(merge: true));
   }
-
   static Future<Map<String, dynamic>?> getUserProfile() async {
     final uid = currentUser?.uid;
     if (uid == null) return null;
     final doc = await _db.collection('users').doc(uid).get();
-    return doc.data();
+    final data = doc.data();
+    if (data == null) return null;
+    return Map<String, dynamic>.from(data);
   }
 
-  // ─── ROADMAP ──────────────────────────────────────────────────────────────
+
+  static Future<void> updateGoalAndLevel({
+    required String goal,
+    required String level,
+    required String hoursPerDay,
+  }) async {
+    final uid = currentUser?.uid;
+    if (uid == null) return;
+    await _db.collection('users').doc(uid).set({
+      'goal': goal,
+      'level': level,
+      'hoursPerDay': hoursPerDay,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  static Future<void> resetRoadmap() async {
+    final uid = currentUser?.uid;
+    if (uid == null) return;
+    await _db.collection('users').doc(uid).set({
+      'roadmap': FieldValue.delete(),
+      'completedTopics': 0,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
   static Future<void> saveRoadmap(List<Map<String, dynamic>> roadmap) async {
     final uid = currentUser?.uid;
     if (uid == null) return;
@@ -77,17 +101,23 @@ class FirebaseService {
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
   }
-
   static Future<List<Map<String, dynamic>>?> getRoadmap() async {
     final uid = currentUser?.uid;
     if (uid == null) return null;
     final doc = await _db.collection('users').doc(uid).get();
     final data = doc.data();
     if (data == null || data['roadmap'] == null) return null;
-    return List<Map<String, dynamic>>.from(data['roadmap']);
+
+    final rawList = data['roadmap'] as List;
+    return rawList.map((item) {
+      final map = Map<String, dynamic>.from(item as Map);
+      if (map['tags'] != null) {
+        map['tags'] = List<String>.from((map['tags'] as List).map((e) => e.toString()));
+      }
+      return map;
+    }).toList();
   }
 
-  // ─── PROGRESS ─────────────────────────────────────────────────────────────
   static Future<void> saveProgress({
     required int completedTopics,
     required List<Map<String, dynamic>> roadmap,
@@ -108,7 +138,6 @@ class FirebaseService {
     return doc.data()?['completedTopics'] ?? 0;
   }
 
-  // ─── STREAK ───────────────────────────────────────────────────────────────
   static Future<int> updateStreak() async {
     final uid = currentUser?.uid;
     if (uid == null) return 1;

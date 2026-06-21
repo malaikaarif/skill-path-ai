@@ -37,20 +37,33 @@ class _HomeScreenState extends State<HomeScreen> {
         goal = profile?['goal'] ?? widget.extra['goal'] ?? '';
         level = profile?['level'] ?? widget.extra['level'] ?? '';
         _name = profile?['name'] ?? widget.extra['name'] ?? '';
-        roadmap = savedRoadmap ?? List<Map<String, dynamic>>.from(widget.extra['roadmap'] ?? []);
+        roadmap = savedRoadmap ?? _safeRoadmapFromExtra();
         completedTopics = completed;
         streakDays = streak;
         _loading = false;
       });
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint('Firestore load error: $e');
+      debugPrint('$stack');
       setState(() {
-        roadmap = List<Map<String, dynamic>>.from(widget.extra['roadmap'] ?? []);
+        roadmap = _safeRoadmapFromExtra();
         goal = widget.extra['goal'] ?? '';
         level = widget.extra['level'] ?? '';
         _name = widget.extra['name'] ?? '';
         _loading = false;
       });
     }
+  }
+
+  List<Map<String, dynamic>> _safeRoadmapFromExtra() {
+    final rawList = (widget.extra['roadmap'] ?? []) as List;
+    return rawList.map((item) {
+      final map = Map<String, dynamic>.from(item as Map);
+      if (map['tags'] != null) {
+        map['tags'] = List<String>.from((map['tags'] as List).map((e) => e.toString()));
+      }
+      return map;
+    }).toList();
   }
 
   double get progressPercent =>
@@ -116,10 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         GestureDetector(
-          onTap: () async {
-            await FirebaseService.signOut();
-            if (mounted) context.go('/login');
-          },
+          onTap: () => context.go('/profile', extra: {
+            'roadmap': roadmap,
+            'goal': goal,
+            'level': level,
+          }),
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(

@@ -11,6 +11,7 @@ import 'screens/roadmap_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/quiz_screen.dart';
 import 'services/firebase_service.dart';
+import 'screens/profile_screen.dart';
 
 final router = GoRouter(
   initialLocation: '/splash',
@@ -19,6 +20,12 @@ final router = GoRouter(
     GoRoute(
       path: '/splash',
       builder: (context, state) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => ProfileScreen(
+        extra: state.extra is Map ? Map<String, dynamic>.from(state.extra as Map) : <String, dynamic>{},
+      ),
     ),
     GoRoute(
       path: '/login',
@@ -31,31 +38,31 @@ final router = GoRouter(
     GoRoute(
       path: '/home',
       builder: (context, state) => HomeScreen(
-        extra: (state.extra as Map<String, dynamic>?) ?? {},
+        extra: state.extra is Map ? Map<String, dynamic>.from(state.extra as Map) : <String, dynamic>{},
       ),
     ),
     GoRoute(
       path: '/roadmap',
       builder: (context, state) => RoadmapScreen(
-        extra: (state.extra as Map<String, dynamic>?) ?? {},
+        extra: state.extra is Map ? Map<String, dynamic>.from(state.extra as Map) : <String, dynamic>{},
       ),
     ),
     GoRoute(
       path: '/topic',
       builder: (context, state) => TopicDetailScreen(
-        extra: (state.extra as Map<String, dynamic>?) ?? {},
+        extra: state.extra is Map ? Map<String, dynamic>.from(state.extra as Map) : <String, dynamic>{},
       ),
     ),
     GoRoute(
       path: '/chat',
       builder: (context, state) => ChatScreen(
-        extra: (state.extra as Map<String, dynamic>?) ?? {},
+        extra: state.extra is Map ? Map<String, dynamic>.from(state.extra as Map) : <String, dynamic>{},
       ),
     ),
     GoRoute(
       path: '/quiz',
       builder: (context, state) => QuizScreen(
-        extra: (state.extra as Map<String, dynamic>?) ?? {},
+        extra: state.extra is Map ? Map<String, dynamic>.from(state.extra as Map) : <String, dynamic>{},
       ),
     ),
   ],
