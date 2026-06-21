@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../services/claude_service.dart';
 import '../services/firebase_service.dart';
+import '../services/roadmap_generator.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -335,8 +336,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _generateRoadmap() async {
     setState(() => _loading = true);
     try {
-      final service = ClaudeService();
-      final roadmap = await service.generateRoadmap(
+      final roadmap = RoadmapGenerator.generate(
         goal: selectedGoal!,
         level: selectedLevel!,
         hoursPerDay: selectedHours!,

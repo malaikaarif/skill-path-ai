@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../services/claude_service.dart';
+import '../services/quiz_generator.dart';
 
 class QuizScreen extends StatefulWidget {
   final Map<String, dynamic> extra;
@@ -36,18 +37,15 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   Future<void> _loadQuiz() async {
-    try {
-      final result = await ClaudeService().generateQuiz(
-        topic: topic['title'] ?? '',
-        level: level,
-      );
-      setState(() {
-        questions = result;
-        loading = false;
-      });
-    } catch (e) {
-      setState(() => loading = false);
-    }
+    // Local generation — instant, no API call, never fails
+    final result = QuizGenerator.generate(
+      topicTitle: topic['title'] ?? '',
+      tags: List<String>.from(topic['tags'] ?? []),
+    );
+    setState(() {
+      questions = result;
+      loading = false;
+    });
   }
 
   // ── THE ADAPTIVE ML LOGIC ──────────────────────────────────────────────

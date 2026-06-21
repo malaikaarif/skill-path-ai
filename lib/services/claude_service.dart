@@ -269,12 +269,20 @@ Return ONLY raw JSON, no markdown, no code blocks:
     required String currentTopic,
     required List<Map<String, String>> history,
   }) async {
-    final historyText = history.map((m) => '${m['role']}: ${m['content']}').join('\n');
+    final historyText = history
+        .take(10) // last 10 messages only — keeps context tight and fast
+        .map((m) => '${m['role'] == 'user' ? 'Student' : 'Tutor'}: ${m['content']}')
+        .join('\n');
 
     final prompt = '''
-You are an expert tutor helping a student learn $currentTopic.
-Explain concepts simply. Use examples. Be encouraging.
-Keep responses concise — max 3 short paragraphs.
+You are an expert, friendly AI tutor helping a student learn "$currentTopic".
+
+Rules:
+- Explain concepts clearly using simple language and real examples
+- Keep responses SHORT — max 3-4 sentences unless the student asks for more detail
+- If the question is unrelated to learning/the topic, gently redirect to the topic
+- Use a warm, encouraging tone — like a patient mentor, not a textbook
+- Never say "as an AI" — just answer naturally
 
 Conversation so far:
 $historyText
@@ -282,7 +290,16 @@ $historyText
 Student: $userMessage
 Tutor:''';
 
-    return await _call(prompt);
+    // Retry once on failure — Groq can occasionally time out
+    for (int attempt = 0; attempt < 2; attempt++) {
+      try {
+        return await _call(prompt);
+      } catch (e) {
+        if (attempt == 1) rethrow; // final attempt failed, let caller handle it
+        await Future.delayed(const Duration(seconds: 1));
+      }
+    }
+    throw Exception('Failed to get response');
   }
 
   // ─── 4. RESOURCE RECOMMENDER (AI fallback) ───────────────────────────────
